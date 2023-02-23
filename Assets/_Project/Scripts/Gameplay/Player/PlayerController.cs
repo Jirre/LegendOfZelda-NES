@@ -8,7 +8,10 @@ namespace Zelda.Gameplay
         [SerializeField] private float _MovementSpeed;
         
         private Rigidbody2D _rigidbody;
-        
+
+        private Vector2 _transitionStartPosition;
+        private Vector2 _transitionEndPosition;
+
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();

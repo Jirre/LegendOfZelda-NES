@@ -1302,6 +1302,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: H7
       objectReference: {fileID: 0}
+    - target: {fileID: 8326081632442253361, guid: bc8ac707f3220514eb04a406591e68c0, type: 3}
+      propertyPath: _Position.x
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8326081632442253361, guid: bc8ac707f3220514eb04a406591e68c0, type: 3}
+      propertyPath: _Position.y
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc8ac707f3220514eb04a406591e68c0, type: 3}
 --- !u!4 &442141981006265443 stripped
