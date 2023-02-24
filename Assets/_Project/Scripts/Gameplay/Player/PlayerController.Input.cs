@@ -39,11 +39,9 @@ namespace Zelda.Gameplay
         private void MovementSetContext(InputAction.CallbackContext pContext)
         {
             _movementInput = pContext.ReadValue<Vector2>();
-            if (_movementInput != Vector2.zero)
-                _direction = (Mathf.Atan2(_movementInput.y, _movementInput.x) * Mathf.Rad2Deg + 360f) % 360f;
         }
         
         private void AttackSetContext(InputAction.CallbackContext pContext) => 
-            _attackMeleeInput = pContext.ReadValue<bool>();
+            _attackMeleeInput = pContext.ReadValueAsButton();
     }
 }

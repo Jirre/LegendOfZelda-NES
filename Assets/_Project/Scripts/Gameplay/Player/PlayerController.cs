@@ -6,6 +6,9 @@ namespace Zelda.Gameplay
     public partial class PlayerController : MonoBehaviour
     {
         [SerializeField] private float _MovementSpeed;
+        [SerializeField] private float _AttackDuration;
+        [SerializeField] private Transform _WeaponRoot;
+        [SerializeField] private SpriteRenderer _WeaponRenderer;
         
         private Rigidbody2D _rigidbody;
 
@@ -15,6 +18,7 @@ namespace Zelda.Gameplay
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
+            _WeaponRoot.gameObject.SetActive(false);
             
             InitStates();
             InitAnimation();

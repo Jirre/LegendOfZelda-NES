@@ -22,6 +22,7 @@ namespace Zelda.Gameplay
             _states = new StateMachine<EPlayerStates>();
             _states.AddState(EPlayerStates.Idle, IdleState);
             _states.AddState(EPlayerStates.Walking, WalkingState);
+            _states.AddState(EPlayerStates.Attacking, AttackingState);
             
             _states.AddState(EPlayerStates.Transition, TransitionState);
             
@@ -30,7 +31,6 @@ namespace Zelda.Gameplay
 
         private void UpdateState()
         {
-            Debug.Log(_states.CurrentState);
             _states.Update(Time.deltaTime);
         }
         
@@ -38,8 +38,15 @@ namespace Zelda.Gameplay
         {
             if (_movementInput != Vector2.zero)
                 _states.Goto(EPlayerStates.Walking);
-            
-            _rigidbody.velocity = Vector2.zero;
+
+            if (_attackMeleeInput)
+            {
+                _states.Goto(EPlayerStates.Attacking);
+                return;
+            }
+
+            Rotate();
+            Translate();
         }
 
         private void WalkingState(State<EPlayerStates> pState)
@@ -50,6 +57,44 @@ namespace Zelda.Gameplay
                 _rigidbody.velocity = Vector2.zero;
             }
             
+            if (_attackMeleeInput)
+            {
+                _states.Goto(EPlayerStates.Attacking);
+                return;
+            }
+            
+            Rotate();
+            Translate();
+        }
+
+        private void AttackingState(State<EPlayerStates> pState)
+        {
+            _rigidbody.velocity = Vector2.zero;
+            if (pState.IsFirstFrame)
+            {
+                _WeaponRoot.gameObject.SetActive(true);
+                _WeaponRoot.rotation = Quaternion.Euler(0, 0, _direction - 90f);
+            }
+            
+            _WeaponRenderer.transform.localPosition = Vector3.up * 
+                                                      Mathf.Clamp(
+                                                          Mathf.Round(
+                                                              Mathf.Sin((pState.ActiveTime / _AttackDuration) * Mathf.PI) * 4f) * 0.25f, 
+                                                          0, 0.75f);
+
+            if (!(pState.ActiveTime >= _AttackDuration)) return;
+            _WeaponRoot.gameObject.SetActive(false);
+            _states.Goto(EPlayerStates.Idle);
+        }
+
+        private void Rotate()
+        {
+            if (_movementInput != Vector2.zero)
+                _direction = (Mathf.Atan2(_movementInput.y, _movementInput.x) * Mathf.Rad2Deg + 360f) % 360f;
+        }
+        
+        private void Translate()
+        {
             _rigidbody.velocity = _movementInput * _MovementSpeed;
         }
 
