@@ -1,3 +1,7 @@
+// ----------------------------------------
+// Created by Jirre Verkerk
+// given out for educational purposes
+// ----------------------------------------
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -12,8 +16,8 @@ namespace Zelda.Internal
         public override bool RuleMatch(int neighbor, TileBase tile) {
             switch (neighbor) 
             {
-                case TilingRuleOutput.Neighbor.This: return tile == this || _Matches.Contains(this);
-                case TilingRuleOutput.Neighbor.NotThis: return tile != this && !_Matches.Contains(this);
+                case TilingRuleOutput.Neighbor.This: return tile == this || _Matches.Contains(tile);
+                case TilingRuleOutput.Neighbor.NotThis: return tile != this && !_Matches.Contains(tile);
             }
 
             return false;

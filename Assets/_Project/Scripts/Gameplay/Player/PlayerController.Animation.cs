@@ -26,19 +26,31 @@ namespace Zelda.Gameplay
         
         public void UpdateAnimation()
         {
-            _animator.SetFloat("Direction", _direction);
+            _animator.SetFloat("Direction", GetDirection());
             _animator.SetInteger("State", (int)GetAnimationState());
         }
 
+        private float GetDirection()
+        {
+            return _states.CurrentState switch
+            {
+                EPlayerStates.Climbing => 90f,
+                _ => _direction
+            };
+        }
+        
         private EAnimationStates GetAnimationState()
         {
             return _states.CurrentState switch
             {
                 EPlayerStates.Idle => EAnimationStates.Idle,
                 EPlayerStates.Walking => EAnimationStates.Walking,
-                EPlayerStates.Transition => EAnimationStates.Walking,
+                EPlayerStates.Translate => EAnimationStates.Walking,
                 EPlayerStates.Attacking => EAnimationStates.Attacking,
                 EPlayerStates.Dead => EAnimationStates.Dead,
+                
+                EPlayerStates.Sleep => EAnimationStates.Idle,
+                EPlayerStates.Climbing => EAnimationStates.Walking,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

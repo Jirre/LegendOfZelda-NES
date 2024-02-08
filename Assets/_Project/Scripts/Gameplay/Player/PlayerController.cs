@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zelda.Systems;
 
 namespace Zelda.Gameplay
 {
@@ -7,14 +8,24 @@ namespace Zelda.Gameplay
     {
         [SerializeField] private float _MovementSpeed;
         [SerializeField] private float _AttackDuration;
+
+        [SerializeField] private Transform _ModelRoot;
+        
         [SerializeField] private Transform _WeaponRoot;
         [SerializeField] private SpriteRenderer _WeaponRenderer;
-        
+
+        private GameManager _gameManager;
         private Rigidbody2D _rigidbody;
 
-        private Vector2 _transitionStartPosition;
-        private Vector2 _transitionEndPosition;
+        private Vector2 _lerpStartPosition;
+        private Vector2 _lerpEndPosition;
+        private float _lerpDuration;
 
+        public void Initialize(GameManager pManager)
+        {
+            _gameManager = pManager;
+        }
+        
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();

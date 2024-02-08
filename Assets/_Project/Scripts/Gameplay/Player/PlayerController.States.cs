@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zelda.Internal;
 
 namespace Zelda.Gameplay
@@ -12,10 +13,16 @@ namespace Zelda.Gameplay
             Attacking,
             Dead,
             
-            Transition,
+            Sleep,
+            
+            Translate,
+            Climbing,
         }
         
         private StateMachine<EPlayerStates> _states;
+        private Action<StateMachine<EPlayerStates>> _OnStateCompleteEvent;
+
+        public EPlayerStates CurrentState => _states.CurrentState;
 
         private void InitStates()
         {
@@ -24,7 +31,10 @@ namespace Zelda.Gameplay
             _states.AddState(EPlayerStates.Walking, WalkingState);
             _states.AddState(EPlayerStates.Attacking, AttackingState);
             
-            _states.AddState(EPlayerStates.Transition, TransitionState);
+            _states.AddState(EPlayerStates.Sleep, SleepState);
+            
+            _states.AddState(EPlayerStates.Translate, TranslationState);
+            _states.AddState(EPlayerStates.Climbing, ClimbingState);
             
             _states.Goto(EPlayerStates.Idle);
         }
@@ -87,6 +97,14 @@ namespace Zelda.Gameplay
             _states.Goto(EPlayerStates.Idle);
         }
 
+        public void Sleep()
+        {
+            _states.Goto(EPlayerStates.Sleep);
+        }
+        
+        /// <summary> Flag State </summary>
+        private void SleepState(State<EPlayerStates> pState) { }
+
         private void Rotate()
         {
             if (_movementInput != Vector2.zero)
@@ -98,21 +116,52 @@ namespace Zelda.Gameplay
             _rigidbody.velocity = _movementInput * _MovementSpeed;
         }
 
-        public void DeltaTransition(Vector2Int pDelta)
+        public float Translate(Vector2 pPosition, bool pInstantaneous = false)
         {
-            _transitionStartPosition = transform.position;
-            _transitionEndPosition = _transitionStartPosition + pDelta;
-            
-            _states.Goto(EPlayerStates.Transition);
+            if (pInstantaneous)
+            {
+                _rigidbody.position = pPosition;
+                return 0f;
+            }
+
+            float duration = Vector2.Distance(_rigidbody.position, pPosition) / _MovementSpeed;
+            Translate(pPosition, duration);
+            return duration;
         }
         
-        private void TransitionState(State<EPlayerStates> pState)
+        public void Translate(Vector2 pPosition, float pDuration)
+        {
+            _lerpStartPosition = _rigidbody.position;
+            _lerpEndPosition = pPosition;
+            _lerpDuration = pDuration;
+            _states.Goto(EPlayerStates.Translate);
+        }
+        
+        private void TranslationState(State<EPlayerStates> pState)
         {
             _rigidbody.position =
-                Vector2.Lerp(_transitionStartPosition, _transitionEndPosition, pState.ActiveTime - 0.2f);
+                Vector2.Lerp(_lerpStartPosition, _lerpEndPosition, pState.ActiveTime - 0.2f);
+
+            if (pState.ActiveTime < _lerpDuration) return;
+            _states.Goto(EPlayerStates.Idle);
+        }
+
+        public void Climb(Vector2 pStart, Vector2 pEnd, float pDuration)
+        {
+            _lerpStartPosition = pStart;
+            _lerpEndPosition = pEnd;
+            _lerpDuration = pDuration;
             
-            if (pState.ActiveTime >= 1.4f)
-                _states.Goto(EPlayerStates.Idle);
+            _states.Goto(EPlayerStates.Climbing);
+        }
+        
+        private void ClimbingState(State<EPlayerStates> pState)
+        {
+            _ModelRoot.localPosition =
+                Vector2.Lerp(_lerpStartPosition, _lerpEndPosition, pState.ActiveTime / _lerpDuration);
+
+            if (pState.ActiveTime < _lerpDuration) return;
+            _states.Goto(EPlayerStates.Idle);
         }
     }
 }

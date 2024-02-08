@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Zelda.Internal;
+using Zelda.Systems.Transitions;
+using Zelda.World;
 
 namespace Zelda.Systems
 {
@@ -12,7 +15,7 @@ namespace Zelda.Systems
             Transition,
             GameOver
         }
-
+        
         private StateMachine<EStates> _states;
 
         private void InitStates()
@@ -27,7 +30,9 @@ namespace Zelda.Systems
 
         private void InitState(State<EStates> pState)
         {
-            InitRooms();
+            _worldManager = FindObjectOfType<WorldManager>();
+            _worldManager.Initialize();
+            
             InitCamera();
             InitPlayer();
             
@@ -41,15 +46,24 @@ namespace Zelda.Systems
 
             Vector2Int delta = _camera.GetBorderDelta(_player.transform.position);
             _camera.DeltaGoto(delta);
-            _player.DeltaTransition(delta);
-
-            _states.Goto(EStates.Transition);
+            Transition(new MoveOverTimeTransitionEvent(delta, 1.4f));
         }
-
+        
+        
         private void TransitionState(State<EStates> pState)
         {
-            if (pState.ActiveTime > 1.4f)
+            _transitionQueue ??= new Queue<ITransitionEvent>();
+            if (_currentTransition != null && !_currentTransition.IsReady(pState.ActiveTime))
+                return;
+
+            if (_transitionQueue.Count > 0)
+            {
                 _states.Goto(EStates.Gameplay);
+                return;
+            }
+            
+            _currentTransition = _transitionQueue.Dequeue();
+            _currentTransition.OnTrigger(this, _player);
         }
     }
 }
