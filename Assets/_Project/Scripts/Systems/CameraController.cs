@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Zelda.World;
 
 namespace Zelda.Systems
 {
@@ -83,8 +84,8 @@ namespace Zelda.Systems
 
         public bool IsInsideBounds(Vector2 pPosition)
         {
-            Rect rect = new Rect((Vector2)transform.position - new Vector2(Constants.ROOM_WIDTH, Constants.ROOM_HEIGHT) * 0.5f + Vector2.one * _TransitionBorderWidth,
-                new Vector2(Constants.ROOM_WIDTH, Constants.ROOM_HEIGHT) - Vector2.one * _TransitionBorderWidth * 2f);
+            Rect rect = new Rect((Vector2)transform.position - new Vector2(Room.WIDTH, Room.HEIGHT) * 0.5f + Vector2.one * _TransitionBorderWidth,
+                new Vector2(Room.WIDTH, Room.HEIGHT) - Vector2.one * _TransitionBorderWidth * 2f);
 
             return rect.Contains(pPosition);
         }
@@ -104,7 +105,7 @@ namespace Zelda.Systems
 
         private Vector2 GetRoomPosition(Vector2 pPosition)
         {
-            return new Vector3(pPosition.x * Constants.ROOM_WIDTH, pPosition.y * Constants.ROOM_HEIGHT - 0.25f);
+            return new Vector3(pPosition.x * Room.WIDTH, pPosition.y * Room.HEIGHT - 0.25f);
         }
     }
 }

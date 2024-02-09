@@ -44,7 +44,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
@@ -69,7 +69,7 @@ TextureImporter:
     maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -91,6 +91,30 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: Server
     maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -3159,7 +3183,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       overworld_tiles_108: -486794794
-      overworld_tiles_2: 1208076138
+      overworld_tiles_96: -965522502
       overworld_tiles_71: -1135577449
       overworld_tiles_80: -1923629427
       overworld_tiles_14: 2029672121
@@ -3173,7 +3197,7 @@ TextureImporter:
       overworld_tiles_85: 530669510
       overworld_tiles_15: 716689044
       overworld_tiles_23: 513811877
-      overworld_tiles_22: -757413009
+      overworld_tiles_112: -1049918909
       overworld_tiles_10: -1820733924
       overworld_tiles_95: 1673212909
       overworld_tiles_76: -289353608
@@ -3230,11 +3254,11 @@ TextureImporter:
       overworld_tiles_82: -896878563
       overworld_tiles_56: -1078749496
       overworld_tiles_136: -1837676664
-      overworld_tiles_9: 996562082
       overworld_tiles_68: -923012255
-      overworld_tiles_122: -575378195
+      overworld_tiles_9: 996562082
       overworld_tiles_26: -620852562
       overworld_tiles_100: 996147127
+      overworld_tiles_122: -575378195
       overworld_tiles_8: -2072216636
       overworld_tiles_51: -1349811512
       overworld_tiles_143: 1237811831
@@ -3289,19 +3313,19 @@ TextureImporter:
       overworld_tiles_28: -1583691289
       overworld_tiles_126: -581482586
       overworld_tiles_40: -602440101
+      overworld_tiles_2: 1208076138
       overworld_tiles_59: -580297136
-      overworld_tiles_63: -1001868124
-      overworld_tiles_96: -965522502
+      overworld_tiles_41: -1081814072
       overworld_tiles_133: 1974865169
-      overworld_tiles_115: -619746013
-      overworld_tiles_119: -251114021
+      overworld_tiles_22: -757413009
       overworld_tiles_32: -505957200
       overworld_tiles_77: -1247108523
-      overworld_tiles_41: -1081814072
-      overworld_tiles_132: -1501642725
+      overworld_tiles_115: -619746013
+      overworld_tiles_119: -251114021
+      overworld_tiles_63: -1001868124
       overworld_tiles_131: 1632134818
+      overworld_tiles_132: -1501642725
       overworld_tiles_103: 1024575229
-      overworld_tiles_112: -1049918909
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

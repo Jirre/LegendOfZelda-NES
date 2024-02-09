@@ -2,9 +2,9 @@
 
 namespace Zelda.Systems.Transitions
 {
-    public class SleepTransitionEvent : ITransitionEvent
+    public readonly struct SleepTransitionEvent : ITransitionEvent
     {
-        public float Duration { get; private set; }
+        public float Duration { get; }
 
         public SleepTransitionEvent(float pDuration)
         {

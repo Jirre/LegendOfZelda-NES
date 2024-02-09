@@ -3,11 +3,11 @@ using Zelda.Gameplay;
 
 namespace Zelda.Systems.Transitions
 {
-    public class ClimbTransitionEvent : ITransitionEvent
+    public readonly struct ClimbTransitionEvent : ITransitionEvent
     {
-        public Vector2 StartOffset { get; private set; }
-        public Vector2 EndOffset { get; private set; }
-        public float Duration { get; private set; }
+        public Vector2 StartOffset { get; }
+        public Vector2 EndOffset { get; }
+        public float Duration { get; }
 
         public ClimbTransitionEvent(Vector2 pStart, Vector2 pEnd, float pDuration)
         {

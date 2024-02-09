@@ -1,5 +1,4 @@
-﻿using System;
-using Zelda.Gameplay;
+﻿using Zelda.Gameplay;
 
 namespace Zelda.Systems.Transitions
 {
@@ -8,5 +7,10 @@ namespace Zelda.Systems.Transitions
         void OnTrigger(GameManager pManager, PlayerController pPlayer);
 
         bool IsReady(float pActiveTime);
+    }
+
+    public interface ITransitionCompleteEvent
+    {
+        void OnComplete(GameManager pManager, PlayerController pPlayer);
     }
 }

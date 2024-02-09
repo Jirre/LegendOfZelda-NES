@@ -4,11 +4,11 @@ using Zelda.World;
 
 namespace Zelda.Systems.Transitions
 {
-    public class TeleportTransitionEvent : ITransitionEvent
+    public readonly struct TeleportTransitionEvent : ITransitionEvent
     {
-        public EWorldLayer Layer { get; private set; }
-        public Vector2Int Room { get; private set; }
-        public Vector2 Position { get; private set; }
+        public EWorldLayer Layer { get;  }
+        public Vector2Int Room { get;  }
+        public Vector2 Position { get;  }
 
         public TeleportTransitionEvent(EWorldLayer pLayer, Vector2Int pRoom, Vector2 pPosition)
         {
@@ -19,6 +19,7 @@ namespace Zelda.Systems.Transitions
         
         public void OnTrigger(GameManager pManager, PlayerController pPlayer)
         {
+            pManager.SetLayer(Layer);
             pPlayer.Translate(World.Room.GetRoomPosition(Room, Position), true);
         }
 

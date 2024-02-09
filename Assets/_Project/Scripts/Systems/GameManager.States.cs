@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zelda.Internal;
 using Zelda.Systems.Transitions;
+using Zelda.UI;
 using Zelda.World;
 
 namespace Zelda.Systems
@@ -32,6 +32,8 @@ namespace Zelda.Systems
         {
             _worldManager = FindObjectOfType<WorldManager>();
             _worldManager.Initialize();
+
+            _uiManager = FindObjectOfType<UIManager>();
             
             InitCamera();
             InitPlayer();
@@ -41,29 +43,28 @@ namespace Zelda.Systems
 
         private void GameplayState(State<EStates> pState)
         {
-            if (_camera.IsInsideBounds(_player.transform.position))
+            if (_camera.IsInsideBounds(_player.transform.position) || 
+                !_worldManager.CurrentRoom.BorderTransition)
                 return;
 
-            Vector2Int delta = _camera.GetBorderDelta(_player.transform.position);
-            _camera.DeltaGoto(delta);
-            Transition(new MoveOverTimeTransitionEvent(delta, 1.4f));
+            Vector2 delta = _camera.GetBorderDelta(_player.transform.position);
+            Vector2 target = (Vector2) _player.transform.position + delta;
+            _camera.DeltaGoto(Vector2Int.RoundToInt(delta));
+            Transition(new MoveOverTimeTransitionEvent(target, 1.4f));
+            _worldManager.UpdateCurrentRoom(Room.PositionToRoomIndex(target));
         }
-        
         
         private void TransitionState(State<EStates> pState)
         {
-            _transitionQueue ??= new Queue<ITransitionEvent>();
-            if (_currentTransition != null && !_currentTransition.IsReady(pState.ActiveTime))
-                return;
-
-            if (_transitionQueue.Count > 0)
+            if (_transitionHandler.IsRunning)
             {
-                _states.Goto(EStates.Gameplay);
+                _transitionHandler.Update(Time.deltaTime);
                 return;
             }
-            
-            _currentTransition = _transitionQueue.Dequeue();
-            _currentTransition.OnTrigger(this, _player);
+
+            _worldManager.UpdateCurrentRoom(Room.PositionToRoomIndex(_player.transform.position));
+            _player.Idle();
+            _states.Goto(EStates.Gameplay);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Zelda.World
     {
         [SerializeField] private List<Room> _RoomPrefabs;
         [SerializeField] private EWorldLayer _CurrentLayer;
+        public Room CurrentRoom { get; private set; }
         
         private Grid _grid;
         private Dictionary<EWorldLayer, Dictionary<Vector2Int, Room>> _rooms;
@@ -25,7 +26,7 @@ namespace Zelda.World
             }
             
             _rooms = new Dictionary<EWorldLayer, Dictionary<Vector2Int, Room>>();
-            List<Room> rooms = new List<Room>(FindObjectsOfType<Room>());
+            List<Room> rooms = new List<Room>(FindObjectsOfType<Room>(true));
             foreach (Room r in rooms)
             {
                 if (!_rooms.ContainsKey(r.Layer))
@@ -37,6 +38,8 @@ namespace Zelda.World
                     continue;
                 }
                 _rooms[r.Layer].Add(r.Position, r);
+
+                r.gameObject.SetActive(r.Layer == _CurrentLayer);
             }
 
             if (_RoomPrefabs.Count <= 0) return;
@@ -51,5 +54,34 @@ namespace Zelda.World
                     _rooms[r.Layer].Add(r.Position, r);
             }
         }
+        
+        public void ActivateLayer(EWorldLayer pLayer)
+        {
+            _CurrentLayer = pLayer;
+            foreach (KeyValuePair<EWorldLayer,Dictionary<Vector2Int,Room>> layer in _rooms)
+            {
+                bool active = layer.Key == pLayer;
+                foreach (KeyValuePair<Vector2Int, Room> room in layer.Value)
+                {
+                    room.Value.gameObject.SetActive(active);
+                }
+            }
+        }
+        
+        public void UpdateCurrentRoom(Vector2Int pNewPosition)
+        {
+            if (_rooms.ContainsKey(_CurrentLayer) && _rooms[_CurrentLayer].ContainsKey(pNewPosition))
+                CurrentRoom = _rooms[_CurrentLayer][pNewPosition];
+        }
+        
+        public Room GetRoom(EWorldLayer pLayer, Vector2Int pPosition)
+        {
+            if (_rooms.ContainsKey(pLayer) && _rooms[pLayer].ContainsKey(pPosition))
+                return _rooms[pLayer][pPosition];
+            return null;
+        }
+        
+        public Room GetRoom(EWorldLayer pLayer, int pX, int pY) =>
+            GetRoom(pLayer, new Vector2Int(pX, pY));
     }
 }

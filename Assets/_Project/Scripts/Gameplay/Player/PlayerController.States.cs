@@ -43,6 +43,11 @@ namespace Zelda.Gameplay
         {
             _states.Update(Time.deltaTime);
         }
+
+        public void Idle()
+        {
+            _states.Goto(EPlayerStates.Idle);
+        }
         
         private void IdleState(State<EPlayerStates> pState)
         {
@@ -139,13 +144,27 @@ namespace Zelda.Gameplay
         
         private void TranslationState(State<EPlayerStates> pState)
         {
-            _rigidbody.position =
-                Vector2.Lerp(_lerpStartPosition, _lerpEndPosition, pState.ActiveTime - 0.2f);
-
+            _rigidbody.position = 
+                Vector2.Lerp(_lerpStartPosition, _lerpEndPosition, pState.ActiveTime / _lerpDuration);
+            
             if (pState.ActiveTime < _lerpDuration) return;
-            _states.Goto(EPlayerStates.Idle);
+            _rigidbody.position = _lerpEndPosition;
+            _states.Goto(EPlayerStates.Sleep);
         }
 
+        public float Climb(Vector2 pStart, Vector2 pEnd, bool pInstantaneous)
+        {
+            if (pInstantaneous)
+            {
+                _ModelRoot.localPosition = pEnd;
+                return 0f;
+            }
+            
+            float duration = Vector2.Distance(pStart, pEnd) / _MovementSpeed;
+            Climb(pStart, pEnd, duration);
+            return duration;
+        }
+        
         public void Climb(Vector2 pStart, Vector2 pEnd, float pDuration)
         {
             _lerpStartPosition = pStart;
@@ -157,11 +176,12 @@ namespace Zelda.Gameplay
         
         private void ClimbingState(State<EPlayerStates> pState)
         {
-            _ModelRoot.localPosition =
-                Vector2.Lerp(_lerpStartPosition, _lerpEndPosition, pState.ActiveTime / _lerpDuration);
+            _ModelRoot.localPosition =(_lerpDuration - 0.2f) <= 0f ? 
+                _lerpEndPosition : 
+                Vector2.Lerp(_lerpStartPosition, _lerpEndPosition, (pState.ActiveTime - 0.2f) / (_lerpDuration - 0.2f));
 
             if (pState.ActiveTime < _lerpDuration) return;
-            _states.Goto(EPlayerStates.Idle);
+            _states.Goto(EPlayerStates.Sleep);
         }
     }
 }

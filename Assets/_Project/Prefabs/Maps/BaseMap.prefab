@@ -143,6 +143,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Position: {x: 0, y: 0}
+  _Layer: 0
+  _BorderTransition: 1
 --- !u!1 &8062192645039818575
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,12 +3,12 @@ using Zelda.Gameplay;
 
 namespace Zelda.Systems.Transitions
 {
-    public class MoveOverTimeTransitionEvent : ITransitionEvent
+    public readonly struct MoveOverTimeTransitionEvent : ITransitionEvent, ITransitionCompleteEvent
     {
-        public Vector2Int Target { get; private set; }
-        public float Duration { get; private set; }
+        public Vector2 Target { get; }
+        public float Duration { get; }
 
-        public MoveOverTimeTransitionEvent(Vector2Int pTarget, float pDuration)
+        public MoveOverTimeTransitionEvent(Vector2 pTarget, float pDuration)
         {
             Target = pTarget;
             Duration = pDuration;
@@ -18,7 +18,12 @@ namespace Zelda.Systems.Transitions
         {
             pPlayer.Translate(Target, Duration);
         }
-        
+
+        public void OnComplete(GameManager pManager, PlayerController pPlayer)
+        {
+            pPlayer.Translate(Target, true);
+        }
+
         public bool IsReady(float pActiveTime) => pActiveTime >= Duration;
     }
 }

@@ -256,6 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _MovementSpeed: 8
   _AttackDuration: 0.5
+  _ModelRoot: {fileID: 2803165022742882910}
   _WeaponRoot: {fileID: 8469157665104968811}
   _WeaponRenderer: {fileID: 9104940284040723317}
   _MovementAction: {fileID: -3470565329560176519, guid: 25090b76bad0f6a419a7fd0dcc22863a, type: 3}
