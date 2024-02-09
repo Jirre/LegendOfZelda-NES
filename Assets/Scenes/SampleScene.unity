@@ -498,10 +498,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1967991948}
     m_Modifications:
-    - target: {fileID: 1684321190893619349, guid: 880d0f1ddf059ab46be7de17a5126848, type: 3}
-      propertyPath: _Position.y
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 3026560742292185555, guid: 880d0f1ddf059ab46be7de17a5126848, type: 3}
       propertyPath: _Position.y
       value: -6
@@ -948,7 +944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284ce3268eec7e442b86538e0109f1e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _TransitionBorderWidth: 0.5
+  _TransitionBorderWidth: 0.45
 --- !u!81 &1579485733
 AudioListener:
   m_ObjectHideFlags: 0
